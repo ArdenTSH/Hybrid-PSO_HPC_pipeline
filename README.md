@@ -2,7 +2,9 @@
 
 This pipeline automates Particle Swarm Optimization (PSO) and PBE calculations on an High-Performance Computing cluster. 
 
-*Prerequisite: This documentation assumes a working knowledge of the base `pso_optimizer.py` script and its arguments.*
+These scripts accompany the undergraduate dissertation Hybrid Particle Swarm Optimisation for Carbon Nanocluster by Arden Tsang, King's College London, 2026.
+
+*Prerequisite: This documentation assumes a working knowledge of the base `pso_optimizer.py` script and its arguments. The PSO optimiser (pso_optimizer.py) itself is developed and maintained by the De Tomas group and is not included in this repository. The modifications introduced in this dissertation (step-cap LBFGS termination, per-step PBE checkpointing, and the --max-pbe-steps / --pbe-checkpoint-interval flags) are documented in Section 5.3 of the dissertation and can be provided on request.*
 
 ## 🚀 Pipeline Architecture
 
@@ -103,6 +105,21 @@ A lightweight bash script designed to run strictly on the **Login Node**. It cal
 **Direct Usage Example (Login Node):**
 `bash sweep.sh --min 3 --max 5 --swarm-size 44 --new_trial`
 > **What to expect:** The script instantly submits three distinct jobs to the queue (`atoms=3`, `atoms=4`, `atoms=5`). The actual optimizations run asynchronously, generating brand new trial folders for each atom count.
+
+---
+
+### 4. `qbenchconv.sh` (The Benchmarking Script)
+
+A standalone benchmarking script, separate from the wrapper / jobr / sweep pipeline above. Used for the inertia-strategy benchmark of the dissertation, in which a single cluster size is fixed and a batch of independent trials is run across multiple inertia strategies, with each trial's PSO output (json and xyz files) preserved individually for downstream inspection.
+
+Configuration --- cluster size, trial count per inertia, list of inertia strategies, swarm size, iteration count, radius --- is hardcoded at the top of the script and edited in place rather than passed as command-line arguments. The script then dispatches its own `qsub` calls per trial, independent of the main `jobr.sh` / `wrapper.sh` machinery.
+
+**Output structure**: per-inertia subfolders, each containing per-trial `runNN_final_pso.xyz` and `runNN_structure_data.json` files for $N = 1$ to the configured trial count. This enables downstream analysis to extract every trial's final geometry and convergence history independently, rather than collapsing per-strategy outputs into a single best-of-batch.
+
+**Usage:**
+
+1. `vim qbenchconv.sh` and edit the configuration block at the top
+2. `qsub qbenchconv.sh`
 
 ---
 
