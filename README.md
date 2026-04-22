@@ -1,4 +1,4 @@
-# PSO HPC Optimization Pipeline (Wrapper, Sweep, Jobr)
+# PSO HPC Optimization Pipeline (Wrapper, Sweep, Jobr, qbenchconv)
 
 This pipeline automates Particle Swarm Optimization (PSO) and PBE calculations on an High-Performance Computing cluster. 
 
