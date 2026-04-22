@@ -70,7 +70,7 @@ This is made so that the files doesn't get dumped on cwd, and is autosorted into
 
 **Direct Usage Example (Interactive Session):**
 `bash wrapper.sh --atoms 5 --inertia chaotic --new_trial`
-> **What to expect:** The wrapper will scan the `run/` directory. If `run_5C_trial1` exists, it will create `run_5A_chaotic_trial2/step1/`. It will execute Python, save the outputs, and log the final energies into `master_run_log.csv`. If `run_5C_trial1` doesn't exist, it will generate it. 
+> **What to expect:** The wrapper will scan the `run/` directory. If `run_5C_trial1` exists, it will create `run_5C_trial2/step1/`. It will execute Python, save the outputs, and log the final energies into `master_run_log.csv`. If `run_5C_trial1` doesn't exist, it will generate it. 
 
 **Example 2:** `bash wrapper.sh --atoms 5 --swarm-size 30 --iter 500 --inertia chaotic --radius 2.4 --no-pbe  --trial 3 --res 1`
 > **What to expect:** The wrapper will scan the `run/` directory. It will look for folder `run_5C_r2.4_s30_i500_nopbe_trial3` and if it exist, it will look into the folder. If it finds `step1` `step2`, it will generate `step3` `step4`.
